@@ -1,23 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Author(models.Model):
-    rating = models.IntegerField(default=0)
-    user_key = models.ForeignKey(User, on_delete=models.CASCADE)
-
-#Тут может быть недопонимание понятия самого метода
-    def update_rating(self):
-        pass
-        #self.k = self.rating
-        #self.k += self.user_key.
-        #return self.rating
-
-
 class Category(models.Model):
     category = models.CharField(max_length=50, unique=True)
 
 
-YEAR_IN_SCHOOL_CHOICES = [
+choiced_post = [
     ('ar', 'Article'),
     ('nw', 'News')
 ]
@@ -35,7 +23,7 @@ class Post(models.Model):
     ]
     choice_ar_nw = models.CharField(
         max_length=2,
-        choices=ar_nw,
+        choices=choiced_post,
         default=Article,
     )
 
@@ -73,7 +61,41 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
 
+#для нахождения рейтинга всех комментариев пользователя с user_id ==
+def rating_comments_of_user(user_id_inlet):
+    list_comment_of_user = list(Comment.objects.filter(user_id = user_id_inlet))
+    rating = 0
+    for _ in range(len(list_comment_of_user)):
+        rating += list_comment_of_user[_].rating
+    return rating
+
+#для нахождения рейтинга постов пользователя
+def rating_posts_of_user(user_id):
+    list_post_of_user = list(Post.objects.filter(author_id = user_id))
+    rating = 0
+    for _ in range(len(list_post_of_user)):
+        rating += list_post_of_user[_].rating
+    return rating*3
+
+#для нахождения рейтинга комментарий пользователя
+def rating_comments_of_post_of_user(user_id):
+    list_post_of_user = list(Post.objects.filter(author_id = user_id))
+    rating = 0
+    for _ in range(len(list_post_of_user)):
+        list_comment_of_post_of_user = list(Comment.objects.filter(post_id = list_post_of_user[_]))
+        for _i in range(len(list_comment_of_post_of_user)):
+            if list_comment_of_post_of_user[_i].user_id == user_id:
+                pass
+            else:
+                rating += list_comment_of_post_of_user[_i].rating
+    return rating
 
 
-
+class Author(models.Model):
+    rating = models.IntegerField(default=0)
+    #user_key = models.ForeignKey(User, on_delete=models.CASCADE)
+    #fk = User.objects.get(username=user_key).id
+    def update_rating(fk):
+        rating = rating_posts_of_user(fk) + rating_comments_of_post_of_user(fk) + rating_comments_of_user(fk)
+        return rating
 
