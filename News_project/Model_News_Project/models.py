@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Category(models.Model):
     category = models.CharField(max_length=50, unique=True)
 
@@ -34,13 +35,15 @@ class Post(models.Model):
 
     def like(self):
         self.rating += 1
+        self.save()
 
     def dislike(self):
         self.rating -= 1
+        self.save()
 
     def preview(self):
-        return f'{self.content[:5]}...' # Здесь может быть ошибка!!!
-
+        prev_text = 126 if len(self.content)>126 else len(self.content)
+        return self.content[:prev_text]+'...'
 
 
 class PostCategory(models.Model):
@@ -57,45 +60,23 @@ class Comment(models.Model):
 
     def like(self):
         self.rating += 1
+        self.save()
 
     def dislike(self):
         self.rating -= 1
-
-#для нахождения рейтинга всех комментариев пользователя с user_id ==
-def rating_comments_of_user(user_id_inlet):
-    list_comment_of_user = list(Comment.objects.filter(user_id = user_id_inlet))
-    rating = 0
-    for _ in range(len(list_comment_of_user)):
-        rating += list_comment_of_user[_].rating
-    return rating
-
-#для нахождения рейтинга постов пользователя
-def rating_posts_of_user(user_id):
-    list_post_of_user = list(Post.objects.filter(author_id = user_id))
-    rating = 0
-    for _ in range(len(list_post_of_user)):
-        rating += list_post_of_user[_].rating
-    return rating*3
-
-#для нахождения рейтинга комментарий пользователя
-def rating_comments_of_post_of_user(user_id):
-    list_post_of_user = list(Post.objects.filter(author_id = user_id))
-    rating = 0
-    for _ in range(len(list_post_of_user)):
-        list_comment_of_post_of_user = list(Comment.objects.filter(post_id = list_post_of_user[_]))
-        for _i in range(len(list_comment_of_post_of_user)):
-            if list_comment_of_post_of_user[_i].user_id == user_id:
-                pass
-            else:
-                rating += list_comment_of_post_of_user[_i].rating
-    return rating
+        self.save()
 
 
 class Author(models.Model):
     rating = models.IntegerField(default=0)
-    #user_key = models.ForeignKey(User, on_delete=models.CASCADE)
-    #fk = User.objects.get(username=user_key).id
-    def update_rating(fk):
-        rating = rating_posts_of_user(fk) + rating_comments_of_post_of_user(fk) + rating_comments_of_user(fk)
+    user_key = models.ForeignKey(User, on_delete=models.CASCADE)
+    #
+    def update_rating(self):
+        rating_post = self.post_set.filter(author = self).aggregate(total_rating = models.Sum('rating'))['total_rating']*3
+        rating_comments_of_users = self.user_key.comment_set.filter(user = self.user_key).\
+            exclude(post = self.post_set.filter(author = self)).aggregate(total_rating=models.Sum('rating'))['total_rating']
+        rating_comments_of_author = Post.objects.filter(author = self).aggregate(total_rating=models.Sum('rating'))['total_rating']
+        rating = rating_post + rating_comments_of_users + rating_comments_of_author
+        #rating = rating_posts_of_user(str(user_key)) + rating_comments_of_post_of_user(str(user_key)) + rating_comments_of_user(str(user_key))
         return rating
 
