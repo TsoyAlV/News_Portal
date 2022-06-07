@@ -72,11 +72,10 @@ class Author(models.Model):
     user_key = models.ForeignKey(User, on_delete=models.CASCADE)
     #
     def update_rating(self):
-        rating_post = self.post_set.filter(author = self).aggregate(total_rating = models.Sum('rating'))['total_rating']*3
-        rating_comments_of_users = self.user_key.comment_set.filter(user = self.user_key).\
-            exclude(post = self.post_set.filter(author = self)).aggregate(total_rating=models.Sum('rating'))['total_rating']
-        rating_comments_of_author = Post.objects.filter(author = self).aggregate(total_rating=models.Sum('rating'))['total_rating']
-        rating = rating_post + rating_comments_of_users + rating_comments_of_author
-        #rating = rating_posts_of_user(str(user_key)) + rating_comments_of_post_of_user(str(user_key)) + rating_comments_of_user(str(user_key))
-        return rating
+        self.rating_post = self.post_set.filter(author = self).aggregate(total_rating = models.Sum('rating'))['total_rating']*3
+        self.rating_comments_of_author = self.user_key.comment_set.exclude(post__in = self.post_set.filter(author = self)).\
+            filter(user = self.user_key).aggregate(total_rating=models.Sum('rating'))['total_rating']
+        self.rating_comments_of_users = Post.objects.filter(author = self).aggregate(total_rating=models.Sum('rating'))['total_rating']
+        self.rating = self.rating_post + self.rating_comments_of_users + self.rating_comments_of_author
+        self.save()
 
