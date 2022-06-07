@@ -1,16 +1,27 @@
 {% extends 'flatpages/default.html' %}
 
+<!-- Название у нас будет products -->
 {% block title %}
-Products
+News
 {% endblock title %}
 
+<!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-
-<h1> Все товары: </h1>
-    {% if products %}
-        {{products}}
-    {% else %}
-        <h2> Товаров нет! </h2>
-    {% endif %}
-
+<h1>All news: {{news|length}}</h1>
+<hr>
+<table>
+    <tr>
+        <td> Name </td>
+        <td> Content </td>
+        <td> Category </td>
+    </tr>
+    {% for i in news %}
+        <tr>
+            <td> {{ i.name }} </td>
+            <td> {{ i.content|truncatechars:20 }} </td>
+            <td> {{ i.category }} </td>
+        </tr>
+    {% endfor %}
+</table>
+<!--{{ news }}  -->
 {% endblock content %}
