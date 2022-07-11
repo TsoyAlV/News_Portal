@@ -9,4 +9,6 @@ CURRENT NEWS
 {% block content %}
 <h1>{{ current_news.name }}</h1>
 {{ current_news.content }}
+<hr>
+time of publication is: {{current_news.datetime_pub}}
 {% endblock content %}

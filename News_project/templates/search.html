@@ -2,7 +2,7 @@
 {% load custom_filters %}
 <!-- Название у нас будет products -->
 {% block title %}
-News
+Search News
 {% endblock title %}
 
 <!-- В контенте на странице мы выводим все товары -->
@@ -20,12 +20,12 @@ News
 </form>
 <table>
     <tr>
-        <td> Namedsds </td>
+        <td> Name </td>
         <td> Content </td>
         <td> Category </td>
         <td> Datetime </td>
     </tr>
-    {% for i in news %}
+    {% for i in search_news %}
         <tr>
             <td> <a href= {{i.id}} >{{ i.name|censor }}</a></td>
             <td> {{ i.content|truncatechars:20|censor }} </td>

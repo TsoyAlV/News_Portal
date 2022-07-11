@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
 class News(models.Model):
     name = models.CharField(
@@ -12,6 +13,7 @@ class News(models.Model):
         on_delete=models.CASCADE,
         related_name='news'
     )
+    datetime_pub = models.DateField(auto_now=True)
 
     def __str__(self):
         return f'{self.name.title()}: {self.content[:20]}...'
