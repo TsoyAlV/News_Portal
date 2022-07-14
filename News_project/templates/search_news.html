@@ -7,14 +7,8 @@ News
 
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-<h1>All news: </h1>
+<h1>Results of searching</h1>
 <hr>
-<form method="GET">
-    {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы придётся делать самому -->
-    <input type="submit" value="Найти">
-</form>
-<hr>
-<a href="news_create">Добавить запись</a> <br>
 <table>
     <tr>
         <td> Name </td>
@@ -22,9 +16,17 @@ News
         <td> Category </td>
         <td> Date of pub </td>
     </tr>
-    {% for i in news_list %}
+    {% for i in search_news %}
         <tr>
-            <td> <a href="{% url 'news_detail' i.id %}"> {{i.name}} </a> </td>
+            <td> {{ i.name }} </td>
+            <td>
+                <a href='<int:pk>'>{{ news.name|title }}</a>
+            </td>
+            <td>
+                <td> <a href="{% url 'news_detail' i.id %}"> {{i.name}} </a> </td>
+                <a href="{% url 'update_news' i.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
+                <a href="{% url 'delete_news' i.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->
+            </td>
             <td> {{ i.content|truncatechars:20 }} </td>
             <td> {{ i.category }} </td>
             <td> {{ i.date_pub }} </td>
