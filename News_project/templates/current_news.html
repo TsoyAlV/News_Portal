@@ -9,5 +9,9 @@ CURRENT NEWS
 {% block content %}
 <h1>{{ current_news.name }}</h1>
 {{ current_news.content }}
-<a href = 'http://127.0.0.1:8000/news/'>Все новости</a>
+<br>
+<a href="{% url 'update_news' current_news.id %} "><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
+<a href="{% url 'delete_news' current_news.id %} "><u> Удалить </u></a>
+<br>
+<a href = '../news/'>Все новости</a>
 {% endblock content %}

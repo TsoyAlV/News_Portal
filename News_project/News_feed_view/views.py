@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import News
 from .forms import NewsForm
-from .filters import NewsFilter
+from .filters import NewsFilter, NewsSimpleFilter
 
 class NewsList(ListView):
     model = News # model what are we going to view
@@ -30,6 +30,7 @@ class NewsDetails(DetailView):
     context_object_name = 'current_news'
 
 
+
 class SearchNews(ListView):
     model = News
     template_name = 'search_news.html'
@@ -43,7 +44,7 @@ class SearchNews(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
+        context['filter'] = NewsSimpleFilter(self.request.GET, queryset=self.get_queryset())
         return context
 
     def post(self, request, *args, **kwargs):

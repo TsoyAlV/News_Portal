@@ -3,7 +3,7 @@ from django.forms import DateInput
 from .models import News
 
 
-class NewsFilter(FilterSet):
+class NewsSimpleFilter(FilterSet):
     date_pub = DateFilter(lookup_expr=('lt'), widget=DateInput(attrs={'type': 'date'}))
     class Meta:
         model = News
@@ -12,7 +12,8 @@ class NewsFilter(FilterSet):
             'category': ['exact']
         }
 
-class NewsSimpleFilter(FilterSet):
+
+class NewsFilter(FilterSet):
     class Meta:
         model = News
         fields = {

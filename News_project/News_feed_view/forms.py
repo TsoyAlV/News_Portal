@@ -5,3 +5,5 @@ class NewsForm(ModelForm):
     class Meta:
         model = News
         fields = ['name', 'category', 'content',]
+
+
