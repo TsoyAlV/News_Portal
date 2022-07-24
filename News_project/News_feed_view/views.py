@@ -40,7 +40,7 @@ class SearchNews(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return NewsFilter(self.request.GET, queryset=queryset).qs
+        return NewsSimpleFilter(self.request.GET, queryset=queryset).qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
