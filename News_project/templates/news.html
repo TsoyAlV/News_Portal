@@ -13,7 +13,6 @@ News
     <input type="submit" value="Найти">
 </form>
 <hr>
-<a href="news_create">Добавить запись</a> <br>
 <table>
     <tr>
         <td> Name </td>
@@ -50,6 +49,7 @@ News
         <a href="?page={{ page_obj.next_page_number }}">>>></a>
         <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
     {% endif %}
-
+<hr>
+<a href="news_create">Добавить запись</a> <br>
 {% endif %}
 {% endblock content %}

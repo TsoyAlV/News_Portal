@@ -24,8 +24,7 @@ SECRET_KEY = 'django-insecure-(c^mtb2c&@2cu!z*b#h^0zu37#-i*tc)i$a=g3&(8b1#1$xs(x
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -41,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'Model_News_Project',
     'News_feed_view',
-
-
+    'sign',
 ]
 
 SITE_ID = 1
@@ -121,7 +119,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+LOGIN_URL = 'sign/login/'
+LOGIN_REDIRECT_URL = '/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
