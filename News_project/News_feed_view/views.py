@@ -2,6 +2,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import News
 from .forms import NewsForm
 from .filters import NewsFilter, NewsSimpleFilter
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class NewsList(ListView):
     model = News # model what are we going to view
@@ -58,13 +60,13 @@ class SearchNews(ListView):
         return super().get(request, *args, **kwargs)
 
 
-class NewsCreateView(CreateView):
+class NewsCreateView(LoginRequiredMixin, CreateView):
     template_name = 'news_create.html'
     form_class = NewsForm
 
 
 
-class NewsUpdateView(UpdateView):
+class NewsUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'news_create.html'
     form_class = NewsForm
 
@@ -74,7 +76,7 @@ class NewsUpdateView(UpdateView):
         return News.objects.get(pk = id)
 
 # дженерик для удаления товара
-class NewsDeleteView(DeleteView):
+class NewsDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'news_delete.html'
     queryset = News.objects.all()
     success_url = '/news/'
