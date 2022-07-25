@@ -2,7 +2,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import News
 from .forms import NewsForm
 from .filters import NewsFilter, NewsSimpleFilter
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 class NewsList(ListView):
@@ -60,15 +60,17 @@ class SearchNews(ListView):
         return super().get(request, *args, **kwargs)
 
 
-class NewsCreateView(LoginRequiredMixin, CreateView):
+class NewsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = ('News_feed_view.create_News')
     template_name = 'news_create.html'
     form_class = NewsForm
 
 
 
-class NewsUpdateView(LoginRequiredMixin, UpdateView):
+class NewsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'news_create.html'
     form_class = NewsForm
+    permission_required = ('News_feed_view.change_News')
 
     # метод get_object мы используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся редактировать
     def get_object(self, **kwargs):
@@ -76,7 +78,8 @@ class NewsUpdateView(LoginRequiredMixin, UpdateView):
         return News.objects.get(pk = id)
 
 # дженерик для удаления товара
-class NewsDeleteView(LoginRequiredMixin, DeleteView):
+class NewsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = ('News_feed_view.delete_News')
     template_name = 'news_delete.html'
     queryset = News.objects.all()
     success_url = '/news/'
