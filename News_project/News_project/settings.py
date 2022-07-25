@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 2
-
+ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

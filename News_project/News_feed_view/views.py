@@ -80,3 +80,5 @@ class NewsDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'news_delete.html'
     queryset = News.objects.all()
     success_url = '/news/'
+
+

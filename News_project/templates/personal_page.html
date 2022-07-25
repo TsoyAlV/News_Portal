@@ -1,0 +1,19 @@
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет products -->
+{% block title %}
+Personal page
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+This is your personal page, you can do anything!!!
+{% if is_not_author %}
+<button> <a href="/sign/do_author/"> Стать автором </a> </button>
+{% endif %}
+{% if is_not_premium %}
+<button> <a href="/sign/upgrade/"> Хочу Premium!</a> </button>
+{% endif %}
+
+<button> <a href="/accounts/logout/"> Выйти </a> </button>
+{% endblock content %}

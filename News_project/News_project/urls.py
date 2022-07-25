@@ -21,4 +21,5 @@ urlpatterns = [
     path('about/', include('django.contrib.flatpages.urls')),
     path('news/', include('News_feed_view.urls'), name = 'newsing'),
     path('accounts/', include('allauth.urls')),
+    path('sign/', include('sign.urls')),
 ]
