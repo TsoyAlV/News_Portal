@@ -3,6 +3,11 @@ from .models import News
 from .forms import NewsForm
 from .filters import NewsFilter, NewsSimpleFilter
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import render, redirect, reverse
+from django.views import View
+from django.core.mail import send_mail, EmailMultiAlternatives
+from datetime import datetime
+from django.template.loader import render_to_string
 
 
 class NewsList(ListView):
@@ -30,7 +35,6 @@ class NewsDetails(DetailView):
     template_name = 'current_news.html'
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'current_news'
-
 
 
 class SearchNews(ListView):
@@ -65,6 +69,31 @@ class NewsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'news_create.html'
     form_class = NewsForm
 
+    def post(self, request, *args, **kwargs):
+        notification = News(
+            name=request.POST['name'],
+            content = request.POST['content'],
+            category = request.POST['category']
+        )
+        notification.save()
+
+        html_content = render_to_string(
+            'appointment_created.html',
+            {
+                'appointment': notification,
+            }
+        )
+
+        msg = EmailMultiAlternatives(
+            subject=f'{notification.name} {notification.date_pub.strftime("%Y-%M-%d")}',
+            body=notification.content,  # это то же, что и message
+            from_email='Ubivawka@yandex.ru',
+            to=['tsoyaleksey96@mail.ru'],  # это то же, что и recipients_list
+        )
+        msg.attach_alternative(html_content, "text/html")  # добавляем html
+        msg.send()  # отсылаем
+
+        return redirect('appointments:make_appointment')
 
 
 class NewsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -83,5 +112,3 @@ class NewsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'news_delete.html'
     queryset = News.objects.all()
     success_url = '/news/'
-
-

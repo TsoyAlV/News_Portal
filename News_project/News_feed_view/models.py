@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
 class News(models.Model):
     name = models.CharField(
@@ -20,11 +21,19 @@ class News(models.Model):
     def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
         return f'/news/{self.id}'
 
+
 class Category(models.Model):
-    # названия категорий тоже не должны повторяться
     name = models.CharField(max_length=100, unique=True)
+    subscribed_user = models.ManyToManyField(User, through='Subscribers')
 
     def __str__(self):
         return self.name.title()
+
+
+class Subscribers(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    cat = models.ForeignKey(to=Category, on_delete=models.CASCADE)
+
+
 
 

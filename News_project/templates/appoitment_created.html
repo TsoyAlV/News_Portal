@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sending mail</title>
+</head>
+<body>
+    <h2> Новая новость: {{ appointment.name }} </h2>
+    <p> Дата публикации: {{ appointment.date|date:"d-M-Y" }} <br>
+        {{ appointment.message|truncatechars:50 }} </p>
+</body>
+</html>
