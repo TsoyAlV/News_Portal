@@ -73,7 +73,7 @@ class NewsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         notification = News(
             name=request.POST['name'],
             content = request.POST['content'],
-            category = request.POST['category']
+            category_id = request.POST['category']
         )
         notification.save()
 
