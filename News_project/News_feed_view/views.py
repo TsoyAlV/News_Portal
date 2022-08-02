@@ -64,7 +64,7 @@ class SearchNews(ListView):
         return super().get(request, *args, **kwargs)
 
 
-class NewsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class NewsCreateView(LoginRequiredMixin, CreateView):
     permission_required = ('News_feed_view.create_News')
     template_name = 'news_create.html'
     form_class = NewsForm
@@ -85,7 +85,7 @@ class NewsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         )
 
         msg = EmailMultiAlternatives(
-            subject=f'{notification.name} {notification.date_pub.strftime("%Y-%M-%d")}',
+            subject=f'{notification.name}',
             body=notification.content,  # это то же, что и message
             from_email='Ubivawka@yandex.ru',
             to=['tsoyaleksey96@mail.ru'],  # это то же, что и recipients_list
@@ -96,7 +96,7 @@ class NewsCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return redirect('appointments:make_appointment')
 
 
-class NewsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class NewsUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'news_create.html'
     form_class = NewsForm
     permission_required = ('News_feed_view.change_News')
@@ -107,7 +107,7 @@ class NewsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         return News.objects.get(pk = id)
 
 # дженерик для удаления товара
-class NewsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class NewsDeleteView(LoginRequiredMixin, DeleteView):
     permission_required = ('News_feed_view.delete_News')
     template_name = 'news_delete.html'
     queryset = News.objects.all()
