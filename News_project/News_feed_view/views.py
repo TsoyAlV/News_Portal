@@ -80,7 +80,7 @@ class NewsCreateView(LoginRequiredMixin, CreateView):
         html_content = render_to_string(
             'appointment_created.html',
             {
-                'appointment': notification,
+                'notification': notification,
             }
         )
 
@@ -93,7 +93,7 @@ class NewsCreateView(LoginRequiredMixin, CreateView):
         msg.attach_alternative(html_content, "text/html")  # добавляем html
         msg.send()  # отсылаем
 
-        return redirect('appointments:make_appointment')
+        return redirect('create_news')
 
 
 class NewsUpdateView(LoginRequiredMixin, UpdateView):
