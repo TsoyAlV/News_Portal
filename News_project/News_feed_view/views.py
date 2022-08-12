@@ -87,7 +87,7 @@ class NewsCreateView(LoginRequiredMixin, CreateView):
         msg = EmailMultiAlternatives(
             subject=f'{notification.name}',
             body=notification.content,  # это то же, что и message
-            from_email='Ubivawka@yandex.ru',
+            from_email='tsoyalexey1996@gmail.com',
             to=['tsoyaleksey96@mail.ru'],  # это то же, что и recipients_list
         )
         msg.attach_alternative(html_content, "text/html")  # добавляем html
